@@ -12,7 +12,7 @@ pipeline {
          stage('Check version') {
                 steps {
                     echo 'Checking version..'
-                    sh './mvn -v'
+                    sh 'mvn -v'
                 }
             }
 
