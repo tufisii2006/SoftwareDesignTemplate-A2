@@ -46,7 +46,8 @@ pipeline {
                 echo 'Publishing to AWS S3....'
                 pwd();
                 withAWS(credentials:'AWS-S3') {
-                    s3Upload(file:'a2-1.0.0.jar', bucket:'infi-s3-ping', path:'target/a2-1.0.1.jar');
+                    def identity=awsIdentity(); //Log AWS credentials
+                    s3Upload(bucket:'infi-s3-ping', workingDir:'target' includePathPattern:'**/*.jar');
                 }
             }
         }
