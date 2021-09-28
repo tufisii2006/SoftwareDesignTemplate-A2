@@ -56,9 +56,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                script{
-                    aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro
-                }
+                aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro
             }
         }
     }
