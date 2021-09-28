@@ -57,9 +57,9 @@ pipeline {
             steps {
                 script{
                 echo 'Deploying....'
-                     withAWS(credentials:'AWS-S3', region:'eu-west-1') {
-                     aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro
-                 }
+                   withAWS(credentials:'AWS-S3', region:'eu-west-1') {
+                    sh 'aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro'
+                  }
                }
             }
         }
