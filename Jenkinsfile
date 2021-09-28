@@ -41,12 +41,21 @@ pipeline {
             }
         }
 
+        stage('Publish to S3 Bucket') {
+            steps {
+                echo 'Publishing to AWS S3....'
+                pwd();
+                withAWS(credentials:'AWS-S3') {
+                    s3Upload(file:'a2-1.0.0.jar', bucket:'infi-s3-ping', path:'target/a2-1.0.1.jar');
+                }
+            }
+        }
+
         stage('Deploy') {
-        //pune sus JAR-ul in S3
-        //ia JAR-ul cu versiunea X din S3
             steps {
                 echo 'Deploying....'
             }
         }
     }
+
 }
