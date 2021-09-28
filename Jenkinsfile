@@ -4,6 +4,13 @@ pipeline {
 
     stages {
 
+         stage('Check version') {
+                steps {
+                    echo 'Checking version..'
+                    sh './gradlew -v'
+                }
+            }
+
         stage('Build') {
             steps {
                 echo 'Building..'
