@@ -47,7 +47,7 @@ pipeline {
                 pwd();
                 withAWS(credentials:'AWS-S3') {
                     def identity=awsIdentity(); //Log AWS credentials
-                    s3Upload(bucket:'infi-s3-ping', workingDir:'target' includePathPattern:'**/*.jar');
+                    s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
                 }
             }
         }
