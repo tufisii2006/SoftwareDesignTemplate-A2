@@ -47,7 +47,7 @@ pipeline {
                 script {
                     withAWS(credentials:'AWS-S3', region:'eu-west-1') {
                         def identity=awsIdentity(); //Log AWS credentials
-                        s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
+                      //  s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
                     }
                 }
             }
@@ -58,7 +58,9 @@ pipeline {
                 script{
                 echo 'Deploying....'
                    withAWS(credentials:'AWS-S3', region:'eu-west-1') {
-                    sh 'aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro'
+                    sh '''
+                    aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro
+                    '''
                   }
                }
             }
