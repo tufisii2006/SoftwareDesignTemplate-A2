@@ -2,9 +2,9 @@ pipeline {
     
     agent any
 
-      tools {
-            maven 'Maven 3.8.2'
-            jdk 'Java 9'
+    tools {
+         maven 'Maven 3.8.2'
+         jdk 'Java 9'
         }
 
     stages {
@@ -19,7 +19,10 @@ pipeline {
         stage('Clean') {
               steps {
                       echo 'Cleaning....'
-                      git 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2.git'
+                      git (
+                          url:'https://github.com/tufisii2006/SoftwareDesignTemplate-A2.git',
+                          branch: "dev"
+                      )
                       sh 'mvn clean compile'
                     }
                 }
@@ -39,6 +42,8 @@ pipeline {
         }
 
         stage('Deploy') {
+        //pune sus JAR-ul in S3
+        //ia JAR-ul cu versiunea X din S3
             steps {
                 echo 'Deploying....'
             }
