@@ -10,7 +10,7 @@
     </parent>
     <groupId>ro.sd</groupId>
     <artifactId>a2</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>Assignment2-SD</name>
     <description>Assignment2-Software Design (Tufisi Radu)</description>
 
