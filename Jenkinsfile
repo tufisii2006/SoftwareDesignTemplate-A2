@@ -7,7 +7,7 @@ pipeline {
          stage('Check version') {
                 steps {
                     echo 'Checking version..'
-                    sh './gradlew -v'
+                    sh './mvn -v'
                 }
             }
 
