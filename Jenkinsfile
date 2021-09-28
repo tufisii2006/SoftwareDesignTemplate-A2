@@ -9,24 +9,31 @@ pipeline {
 
     stages {
 
-         stage('Check version') {
+        stage('Check maven version') {
                 steps {
-                    echo 'Checking version..'
+                    echo 'Checking Maven....'
                     sh 'mvn -v'
                 }
             }
 
+        stage('Clean') {
+              steps {
+                      echo 'Cleaning....'
+                      git 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2.git'
+                      sh 'mvn clean compile'
+                    }
+                }
+
         stage('Build') {
             steps {
-                echo 'Building..'
-                git 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2.git'
-                sh 'mvn clean compile'
+                echo 'Building....'
+                sh 'mvn install'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing....'
                 sh 'mvn test'
             }
         }
