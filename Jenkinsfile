@@ -59,7 +59,10 @@ pipeline {
         stage('Building image') {
           steps{
             script {
-              dockerImage = docker.build "just-name:latest"
+               echo 'Deploying....'
+                    sh '''
+                            docker -v
+                      '''
             }
           }
         }
