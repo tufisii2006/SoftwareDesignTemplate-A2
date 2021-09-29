@@ -5,6 +5,7 @@ pipeline {
     tools {
          maven 'Maven 3.8.2'
          jdk 'Java 9'
+         docker 'Docker'
         }
 
     stages {
