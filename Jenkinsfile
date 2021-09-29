@@ -41,7 +41,9 @@ pipeline {
             }
         }
 
-        stage('Publish to S3 Bucket') {
+        // This was just before: I wanted to send the JAR file to S3 bucket.
+        // The next step will create a docker image and send it to AWS ECR.
+        stage('Publish JAR to S3 Bucket') {
             steps {
                 echo 'Publishing to AWS S3....'
                 script {
@@ -51,6 +53,15 @@ pipeline {
                     }
                 }
             }
+        }
+
+        // Building Docker images
+        stage('Building image') {
+          steps{
+            script {
+              dockerImage = docker.build "just-name:latest"
+            }
+          }
         }
 
         stage('Deploy') {
