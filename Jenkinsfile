@@ -35,13 +35,6 @@ pipeline {
                     }
                 }
 
-        stage('Build') {
-            steps {
-                echo 'Building....'
-                sh 'mvn install -DskipTests'
-            }
-        }
-
         stage('Test') {
             steps {
                 echo 'Testing....'
@@ -68,10 +61,8 @@ pipeline {
           steps{
             script {
                echo 'Building image....'
-                    sh '''
-                            docker -v
-                      '''
-               dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+              docker info
+              dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
         }
