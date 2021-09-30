@@ -67,7 +67,7 @@ pipeline {
         stage('Building docker image') {
           steps{
             script {
-               echo 'Deploying....'
+               echo 'Building image....'
                     sh '''
                             docker -v
                       '''
