@@ -62,6 +62,7 @@ pipeline {
             script {
               echo 'Building image....'
               docker info
+              echo 'Merge?'
             //  dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
