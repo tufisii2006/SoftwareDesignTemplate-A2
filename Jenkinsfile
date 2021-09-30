@@ -58,22 +58,9 @@ pipeline {
 
         // Building Docker images
         stage('Building docker image') {
-
-        agent {
-                docker {
-                    image 'gradle:6.7-jdk11'
-                    // Run the container on the node specified at the top-level of the Pipeline, in the same workspace, rather than on a new node entirely:
-                    reuseNode true
-                }
-            }
-
           steps{
-
             script {
               echo 'Building image....'
-              docker info
-              echo 'Merge?'
-            //  dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
         }
@@ -81,10 +68,11 @@ pipeline {
         stage('Pushing to ECR') {
           steps{
             script {
-             withAWS(credentials:'AWS-S3', region:'eu-west-1') {
+                 echo 'Pushing image to ECR....'
+          /*    withAWS(credentials:'AWS-S3', region:'eu-west-1') {
                 sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
                 sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
-                }
+                } */
              }
             }
           }
@@ -92,14 +80,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                  sh '''
-                          aws --version
-                    '''
-             //   withAWS(credentials:'AWS-S3', region:'eu-west-1') {
-             //  sh '''
-             //  aws ec2 run-instances --image-id ami-0ff338189efb7ed37 --instance-type t3.micro
-             //  '''
-            //   }
             }
         }
     }
