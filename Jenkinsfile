@@ -61,6 +61,9 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
+               withAWS(credentials:'AWS-S3', region:'eu-west-1') {
+                   sh '''aws ec2 describe-instances'''
+                }
             }
           }
         }
