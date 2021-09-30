@@ -51,6 +51,7 @@ pipeline {
                     withAWS(credentials:'AWS-S3', region:'eu-west-1') {
                         def identity = awsIdentity(); //Log AWS credentials
                       //  s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
+                      // sh '''aws ec2 describe-instances'''
                     }
                 }
             }
@@ -61,9 +62,7 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-               withAWS(credentials:'AWS-S3', region:'eu-north-1') {
-                   sh '''aws ec2 describe-instances'''
-                }
+               sshCommand remote: remote, command: "docker -v"
             }
           }
         }
