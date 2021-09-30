@@ -2,6 +2,14 @@ pipeline {
     
     agent any
 
+     environment {
+            AWS_ACCOUNT_ID = "669321770540"
+            AWS_DEFAULT_REGION = "eu-west-1"
+            IMAGE_REPO_NAME = "tufi"
+            IMAGE_TAG = "latest"
+            REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        }
+
     tools {
          maven 'Maven 3.8.2'
          jdk 'Java 9'
@@ -48,7 +56,7 @@ pipeline {
                 echo 'Publishing to AWS S3....'
                 script {
                     withAWS(credentials:'AWS-S3', region:'eu-west-1') {
-                        def identity=awsIdentity(); //Log AWS credentials
+                        def identity = awsIdentity(); //Log AWS credentials
                       //  s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
                     }
                 }
@@ -56,16 +64,28 @@ pipeline {
         }
 
         // Building Docker images
-        stage('Building image') {
+        stage('Building docker image') {
           steps{
             script {
                echo 'Deploying....'
                     sh '''
                             docker -v
                       '''
+               dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
         }
+
+        stage('Pushing to ECR') {
+          steps{
+            script {
+             withAWS(credentials:'AWS-S3', region:'eu-west-1') {
+                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                }
+             }
+            }
+          }
 
         stage('Deploy') {
             steps {
