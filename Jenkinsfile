@@ -60,9 +60,9 @@ pipeline {
         stage('Building docker image') {
           steps{
             script {
-               echo 'Building image....'
+              echo 'Building image....'
               docker info
-              dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+            //  dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
         }
