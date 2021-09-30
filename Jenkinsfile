@@ -8,6 +8,7 @@ pipeline {
             IMAGE_REPO_NAME = "tufi"
             IMAGE_TAG = "latest"
             REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+            dockerImage = ''
         }
 
     tools {
@@ -62,7 +63,7 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-               sshCommand remote: remote, command: "docker -v"
+              dockerImage = docker.build hello-world
             }
           }
         }
