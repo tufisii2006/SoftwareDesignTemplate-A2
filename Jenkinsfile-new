@@ -26,6 +26,7 @@ pipeline {
                 sshagent(['RP3']){
                     sh """
                        pwd
+                       ls /home/ubuntu
                     """
                 }
              }
