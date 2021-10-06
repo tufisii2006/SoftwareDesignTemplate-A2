@@ -23,7 +23,7 @@ pipeline {
 
         stage("SSH into RP3"){
              steps{
-                sshagent(['RP3']){
+                sshagent(credentials:['RP3']){
                     sh """
                        pwd
                        ls /home/ubuntu
