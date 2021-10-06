@@ -27,7 +27,7 @@ pipeline {
                     sh """
                      //  pwd
                     //   ls /home/ubuntu
-                       sh 'ssh -o StrictHostKeyChecking=no 192.168.1.224 ubuntu -a'
+                       sh 'ssh -o StrictHostKeyChecking=no ubuntu@192.168.1.224'
                     """
                 }
              }
