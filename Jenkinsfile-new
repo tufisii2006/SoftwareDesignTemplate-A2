@@ -25,8 +25,8 @@ pipeline {
              steps{
                 sshagent(credentials:['RP3']){
                     sh """
-                       pwd
-                       ls /home/ubuntu
+                     //  pwd
+                    //   ls /home/ubuntu
                        sh 'ssh -o StrictHostKeyChecking=no 192.168.1.224 ubuntu -a'
                     """
                 }
