@@ -1,13 +1,17 @@
 pipeline {
 
-    agent any
+   agent any
+
+   tools {
+         maven 'Maven 3.8.2'
+         jdk 'Java 9'
+        }
 
     stages {
 
-
         stage("Git checkout"){
             steps{
-               git credentialsId: 'tufisii2006', url: 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2'
+               git credentialsId: 'tufisii2006', url: 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2',  branch: "dev"
             }
         }
 
