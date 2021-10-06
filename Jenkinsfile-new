@@ -25,7 +25,7 @@ pipeline {
              steps{
                 sshagent(['RP3']){
                     sh """
-                        ssh -o StrictHostKeyChecking=no ubuntu@192.168.1.224 mkdir deLaJenkins
+                        ssh -o StrictHostKeyChecking=no root@192.168.1.224 mkdir deLaJenkins
                     """
                 }
              }
