@@ -1,0 +1,34 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+
+        stage("Git checkout"){
+            steps{
+               git credentialsId: 'tufisii2006', url: 'https://github.com/tufisii2006/SoftwareDesignTemplate-A2'
+            }
+        }
+
+        stage("Maven Build-Test"){
+            steps{
+               sh "mvn test"
+            }
+        }
+
+        stage("SSH?"){
+             steps{
+                sshagent(['RP3']){
+                    sh """
+                        pwd
+                        mkdir deLaJenkins
+                    """
+                }
+             }
+        }
+
+
+    }
+
+}
