@@ -63,7 +63,7 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-              dockerImage = docker.build -t sdfad-tufisi .
+              dockerImage = docker.build mumu
             }
           }
         }
