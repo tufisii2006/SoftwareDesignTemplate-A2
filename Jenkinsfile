@@ -63,7 +63,7 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-              dockerImage = docker.build mumu
+              dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
             }
           }
         }
