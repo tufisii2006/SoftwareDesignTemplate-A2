@@ -63,7 +63,7 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-              dockerImage = docker.build mongo
+              dockerImage = docker.build .
             }
           }
         }
@@ -72,10 +72,10 @@ pipeline {
           steps{
             script {
                  echo 'Pushing image to ECR....'
-          /*    withAWS(credentials:'AWS-S3', region:'eu-west-1') {
+              withAWS(credentials:'AWS-S3', region:'eu-west-1') {
                 sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
                 sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
-                } */
+                }
              }
             }
           }
