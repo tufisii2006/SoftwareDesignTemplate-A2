@@ -23,8 +23,8 @@ pipeline {
                 steps {
                     echo 'Checking Maven....'
                     sh 'mvn -v'
-                }
-            }
+             }
+        }
 
         stage('Clean and test') {
               steps {
@@ -57,7 +57,6 @@ pipeline {
           steps{
             script {
               echo 'Building image....'
-              echo 'Image tag: $RELEASE_NOTES_IMG_TAG'
               dockerImage = docker.build "${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
             }
           }
@@ -66,6 +65,7 @@ pipeline {
          stage('Logging into AWS ECR') {
             steps {
                 script {
+                echo 'Logging into AWS ECR....'
                 sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                 }
              }
@@ -74,8 +74,9 @@ pipeline {
         stage('Pushing to ECR') {
           steps{
             script {
-                echo 'Pushing image to ECR....'
+                echo 'Tag image with tag ${RELEASE_NOTES_IMG_TAG}'
                 sh "docker tag ${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG} ${REPOSITORY_URI}:$RELEASE_NOTES_IMG_TAG"
+                echo 'Pushing image to ECR....'
             //    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
              }
             }
