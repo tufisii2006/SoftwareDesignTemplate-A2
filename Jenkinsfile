@@ -6,7 +6,7 @@ pipeline {
             AWS_ACCOUNT_ID = "669321770540"
             AWS_DEFAULT_REGION = "eu-west-1"
             IMAGE_REPO_NAME = "tufi"
-            IMAGE_TAG = "latest"
+            RELEASE_NOTES_IMG_TAG = sh (script: """git log --format="medium" -1 ${GIT_COMMIT}""", returnStdout:true)
             REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
             dockerImage = ''
         }
@@ -14,7 +14,8 @@ pipeline {
 /*     tools {
          maven 'Maven 3.8.2'
          jdk 'Java 9'
-        } */
+        }
+*/
 
     stages {
 
@@ -25,23 +26,16 @@ pipeline {
                 }
             }
 
-        stage('Clean') {
+        stage('Clean and test') {
               steps {
-                      echo 'Cleaning....'
+                      echo 'Cleaning and test....'
                       git (
                           url:'https://github.com/tufisii2006/SoftwareDesignTemplate-A2.git',
                           branch: "dev"
                       )
-                      sh 'mvn clean compile'
+                      sh 'mvn clean compile test'
                     }
                 }
-
-        stage('Test') {
-            steps {
-                echo 'Testing....'
-                sh 'mvn test'
-            }
-        }
 
         // This was just before: I wanted to send the JAR file to S3 bucket.
         // The next step will create a docker image and send it to AWS ECR.
@@ -50,20 +44,21 @@ pipeline {
                 echo 'Publishing to AWS S3....'
                 script {
                     withAWS(credentials:'AWS-S3', region:'eu-west-1') {
-                        def identity = awsIdentity(); //Log AWS credentials
-                      //  s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
-                      // sh '''aws ec2 describe-instances'''
+                     //  Log AWS credentials
+                     // def identity = awsIdentity();
+                     //  s3Upload(bucket:'infi-s3-ping', workingDir:'target', includePathPattern:'**/*.jar');
+                     // sh '''aws ec2 describe-instances'''
                     }
                 }
             }
         }
 
-        // Building Docker images
         stage('Building docker image') {
           steps{
             script {
               echo 'Building image....'
-              dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+              echo 'Image tag: $RELEASE_NOTES_IMG_TAG'
+              dockerImage = docker.build "${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
             }
           }
         }
@@ -73,22 +68,22 @@ pipeline {
                 script {
                 sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                 }
-              }
-            }
+             }
+         }
 
         stage('Pushing to ECR') {
           steps{
             script {
                 echo 'Pushing image to ECR....'
-                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
-                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                sh "docker tag ${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG} ${REPOSITORY_URI}:$RELEASE_NOTES_IMG_TAG"
+            //    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
              }
             }
           }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying.... TODO'
             }
         }
     }
