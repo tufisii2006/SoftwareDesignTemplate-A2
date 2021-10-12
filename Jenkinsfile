@@ -6,7 +6,7 @@ pipeline {
             AWS_ACCOUNT_ID = "669321770540"
             AWS_DEFAULT_REGION = "eu-west-1"
             IMAGE_REPO_NAME = "tufi"
-            RELEASE_NOTES_IMG_TAG = sh (script: """git log --format="medium" -1 ${GIT_COMMIT}""", returnStdout:true)
+            RELEASE_NOTES_IMG_TAG = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
             REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
             dockerImage = ''
         }
