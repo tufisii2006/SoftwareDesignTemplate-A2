@@ -83,8 +83,7 @@ pipeline {
             script {
                 sh "docker tag ${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG} ${REPOSITORY_URI}:$RELEASE_NOTES_IMG_TAG"
                 echo 'Pushing image to ECR....'
-                when { expression { params.PUSH_TO_ECR == true } }
-                  steps {
+                if(params.PUSH_TO_ECR == true){
                       sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
                     }
                  }
