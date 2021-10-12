@@ -1,6 +1,14 @@
 pipeline {
     
-    agent any
+     agent any
+
+    parameters {
+         booleanParam(name: "PUSH_TO_ECR", defaultValue: false, description: "Whether you want to push to AWS ECR or not.")
+       //  string(name: "TEST_STRING", defaultValue: "ssbostan", trim: true, description: "Sample string parameter")
+       //  text(name: "TEST_TEXT", defaultValue: "Jenkins Pipeline Tutorial", description: "Sample multi-line text parameter")
+       //  password(name: "TEST_PASSWORD", defaultValue: "SECRET", description: "Sample password parameter")
+       //  choice(name: "TEST_CHOICE", choices: ["production", "staging", "development"], description: "Sample multi-choice parameter")
+     }
 
      environment {
             AWS_ACCOUNT_ID = "669321770540"
@@ -75,9 +83,12 @@ pipeline {
             script {
                 sh "docker tag ${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG} ${REPOSITORY_URI}:$RELEASE_NOTES_IMG_TAG"
                 echo 'Pushing image to ECR....'
-                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
-             }
-            }
+                when { expression { params.PUSH_TO_ECR == true } }
+                  steps {
+                      sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
+                    }
+                 }
+              }
           }
 
         stage('Deploy') {
