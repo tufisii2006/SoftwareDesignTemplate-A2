@@ -37,8 +37,7 @@ pipeline {
                     }
                 }
 
-        // This was just before: I wanted to send the JAR file to S3 bucket.
-        // The next step will create a docker image and send it to AWS ECR.
+        // I wanted to send the JAR file to S3 bucket.
         stage('Publish JAR to S3 Bucket') {
             steps {
                 echo 'Publishing to AWS S3....'
@@ -74,10 +73,9 @@ pipeline {
         stage('Pushing to ECR') {
           steps{
             script {
-                echo 'Tag image with tag ${RELEASE_NOTES_IMG_TAG}'
                 sh "docker tag ${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG} ${REPOSITORY_URI}:$RELEASE_NOTES_IMG_TAG"
                 echo 'Pushing image to ECR....'
-            //    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${RELEASE_NOTES_IMG_TAG}"
              }
             }
           }
