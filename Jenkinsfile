@@ -95,6 +95,6 @@ pipeline {
                 echo 'Deploying.... TODO'
             }
         }
-    }
+      }
 
 }
