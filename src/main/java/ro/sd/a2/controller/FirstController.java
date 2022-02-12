@@ -21,8 +21,9 @@ public class FirstController {
         //validation if needed
         //shall we log a little?
         ModelAndView mav = new ModelAndView();
+
         User user = new User("Bubu");
-        mav.addObject("userObj", "bubu");
+        mav.addObject("fullUserObj", user);
         mav.addObject("numeStudent", user.getName());
         // adaugi x obiecte
         mav.setViewName("profile");
